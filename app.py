@@ -23,9 +23,11 @@
 #     array = list(map(lambda x: {'x': x, 'y': randrange(20)}, range(10)))
 #     return jsonify(array)
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, request 
 import pandas as pd
 from flask_cors import CORS
+import requests
+import configparser
 
 app = Flask(__name__)
 CORS(app)
@@ -115,8 +117,19 @@ def get_topcorepat():
     
     return jsonify(about_topcorepat)
 
+@app.route('/api/gettechcompare', methods=['GET'])
+def get_techcompare():
+    # Read data from Excel file
+    df_techcompare = pd.read_excel("test_techcompare.xlsx")
+    
+    # Convert the data to JSON format
+    about_techcompare = df_techcompare.to_dict(orient="records")
+    
+    return jsonify(about_techcompare)
+
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    # app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
+ 
